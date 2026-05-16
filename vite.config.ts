@@ -24,10 +24,5 @@ export default defineConfig({
     },
     
   },
-  server: {
-    port: 3000,
-    // Optional: set strictPort to true if you want Vite to fail 
-    // if port 3000 is already in use, instead of trying 3001
-    strictPort: true, 
-  },
+ 
 });
