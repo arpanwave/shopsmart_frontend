@@ -11,8 +11,11 @@ import { auth, session, type User } from "./api";
 
 type AuthContextValue = {
   user: User | null;
+
   loading: boolean;
+
   isAdmin: boolean;
+
   login: (
     username: string,
     password: string
@@ -27,6 +30,8 @@ type AuthContextValue = {
   logout: () => Promise<void>;
 
   refresh: () => Promise<void>;
+
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext =
@@ -35,8 +40,11 @@ const AuthContext =
 async function loadUser(): Promise<User | null> {
 
   try {
+
     return await auth.me();
+
   } catch {
+
     return null;
   }
 }
@@ -58,14 +66,20 @@ export function AuthProvider({
     const u = await loadUser();
 
     if (u) {
+
       session.markActive();
+
     } else {
+
       session.markEnded();
     }
 
     setUser(u);
 
   }, []);
+
+  // Alias for OAuth / future compatibility
+  const refreshUser = refresh;
 
   useEffect(() => {
 
@@ -78,30 +92,41 @@ export function AuthProvider({
         const u = await loadUser();
 
         if (!cancelled) {
+
           if (u) {
+
             session.markActive();
+
           } else {
+
             session.markEnded();
           }
+
           setUser(u);
         }
 
       } finally {
 
         if (!cancelled) {
+
           setLoading(false);
         }
       }
 
     })();
 
-    // If the API client gives up (refresh failed after a 401), clear state.
     const off = session.onEnded(() => {
-      if (!cancelled) setUser(null);
+
+      if (!cancelled) {
+
+        setUser(null);
+      }
     });
 
     return () => {
+
       cancelled = true;
+
       off();
     };
 
@@ -113,7 +138,10 @@ export function AuthProvider({
       password: string
     ) => {
 
-      await auth.login(username, password);
+      await auth.login(
+        username,
+        password
+      );
 
       await refresh();
 
@@ -146,11 +174,11 @@ export function AuthProvider({
 
     } catch {
 
-      // ignore network errors
-
+      // Ignore network failures
     }
 
     session.markEnded();
+
     setUser(null);
 
   }, []);
@@ -169,6 +197,7 @@ export function AuthProvider({
         register,
         logout,
         refresh,
+        refreshUser,
       }}
     >
       {children}
@@ -178,7 +207,8 @@ export function AuthProvider({
 
 export function useAuth() {
 
-  const ctx = useContext(AuthContext);
+  const ctx =
+    useContext(AuthContext);
 
   if (!ctx) {
 
