@@ -1,10 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Icon } from "./Icon";
 import { useAuth } from "../lib/auth-context";
@@ -73,6 +68,7 @@ export function AppLayout({
 
       {/* HEADER */}
       <header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
 
           {/* BRAND */}
@@ -85,9 +81,9 @@ export function AppLayout({
             </span>
           </Link>
 
-          {/* SEARCH */}
+          {/* SEARCH (NOW WORKS ON MOBILE TOO) */}
           {showSearch && (
-            <div className="hidden md:flex flex-1 max-w-xl mx-auto">
+            <div className="flex flex-1 mx-3">
               <div className="relative w-full">
                 <Icon
                   name="search"
@@ -106,6 +102,7 @@ export function AppLayout({
 
           <div className="flex-1" />
 
+          {/* USER ACTIONS */}
           {user ? (
             <>
               {/* DESKTOP */}
@@ -114,7 +111,7 @@ export function AppLayout({
                 {isAdmin && (
                   <Link
                     to="/admin"
-                    className="px-3 py-2 rounded-full bg-accent text-sm"
+                    className="px-3 py-2 rounded-full bg-accent text-sm flex items-center gap-1"
                   >
                     <Icon name="shield_person" className="text-[18px]" />
                     Admin
@@ -123,7 +120,7 @@ export function AppLayout({
 
                 <Link
                   to="/products/manage"
-                  className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm"
+                  className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm flex items-center gap-1"
                 >
                   <Icon name="add" className="text-[18px]" />
                   Sell
@@ -173,7 +170,11 @@ export function AppLayout({
 
               {/* MOBILE */}
               <div className="sm:hidden flex items-center gap-2">
-                <Link to="/cart" className="w-10 h-10 flex items-center justify-center">
+
+                <Link
+                  to="/cart"
+                  className="w-10 h-10 flex items-center justify-center"
+                >
                   <Icon name="shopping_cart" />
                 </Link>
 
@@ -192,18 +193,40 @@ export function AppLayout({
           )}
         </div>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE MENU (FIXED DROPDOWN STYLE) */}
         {mobileMenu && user && (
-          <div className="sm:hidden border-t p-4 space-y-2 bg-card">
+          <div className="sm:hidden border-t bg-card px-4 py-3 space-y-2">
 
-            <Link to="/profile" onClick={() => setMobileMenu(false)}>Profile</Link>
-            <Link to="/products/manage" onClick={() => setMobileMenu(false)}>Sell</Link>
+            <Link
+              to="/profile"
+              onClick={() => setMobileMenu(false)}
+              className="block py-2"
+            >
+              Profile
+            </Link>
+
+            <Link
+              to="/products/manage"
+              onClick={() => setMobileMenu(false)}
+              className="block py-2"
+            >
+              Sell
+            </Link>
 
             {isAdmin && (
-              <Link to="/admin" onClick={() => setMobileMenu(false)}>Admin</Link>
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenu(false)}
+                className="block py-2"
+              >
+                Admin
+              </Link>
             )}
 
-            <button onClick={handleLogout} className="text-red-500">
+            <button
+              onClick={handleLogout}
+              className="block py-2 text-red-500"
+            >
               Logout
             </button>
           </div>
