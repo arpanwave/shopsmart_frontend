@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth } from "../lib/auth-context";
 
@@ -7,23 +7,29 @@ export const Route = createFileRoute("/oauth-success")({
 });
 
 function OAuthSuccessPage() {
+
   const { refreshUser } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const run = async () => {
+
+    const load = async () => {
+
       try {
+
         await refreshUser();
+
       } finally {
-        navigate({ to: "/" });
+
+        window.location.href = "/";
       }
     };
 
-    run();
-  }, [refreshUser, navigate]);
+    load();
+
+  }, [refreshUser]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       Signing you in...
     </div>
   );
