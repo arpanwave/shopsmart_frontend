@@ -81,7 +81,7 @@ export function AppLayout({
             </span>
           </Link>
 
-          {/* SEARCH (NOW WORKS ON MOBILE TOO) */}
+          {/* SEARCH */}
           {showSearch && (
             <div className="flex flex-1 mx-3">
               <div className="relative w-full">
@@ -193,9 +193,12 @@ export function AppLayout({
           )}
         </div>
 
-        {/* MOBILE MENU (FIXED DROPDOWN STYLE) */}
+        {/* MOBILE MENU (FIXED CLICK ISSUE) */}
         {mobileMenu && user && (
-          <div className="sm:hidden border-t bg-card px-4 py-3 space-y-2">
+          <div
+            className="sm:hidden border-t bg-card px-4 py-3 space-y-2"
+            onClick={(e) => e.stopPropagation()}
+          >
 
             <Link
               to="/profile"
