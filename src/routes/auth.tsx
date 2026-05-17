@@ -156,6 +156,7 @@ function AuthPage() {
   const handleGoogleLogin = () => {
     setOauthLoading(true);
 
+    console.log("API_URL =", import.meta.env.VITE_API_URL);
     window.location.href =
       `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
   };
