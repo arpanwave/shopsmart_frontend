@@ -26,16 +26,17 @@ export function AppLayout({
 
   const routerState = useRouterState();
 
+  // close menus on route change
   useEffect(() => {
     setMobileMenu(false);
     setOpenProfile(false);
   }, [routerState.location.pathname]);
 
+  // outside click handler (FIXED: no longer breaks navigation)
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenProfile(false);
-        setMobileMenu(false);
       }
     };
 
@@ -185,13 +186,10 @@ export function AppLayout({
                   <Icon name="shopping_cart" />
                 </Link>
 
-                {/* ✅ FIXED HAMBURGER BUTTON */}
+                {/* FIXED HAMBURGER */}
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setMobileMenu(prev => !prev);
-                  }}
+                  onClick={() => setMobileMenu(prev => !prev)}
                   className="w-10 h-10 flex items-center justify-center rounded-md active:bg-accent text-2xl"
                 >
                   {mobileMenu ? "✕" : "☰"}
@@ -206,25 +204,40 @@ export function AppLayout({
           )}
         </div>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE MENU (FIXED NAVIGATION BUG) */}
         {mobileMenu && user && (
           <div className="sm:hidden border-t bg-card px-4 py-3 space-y-2">
 
-            <Link to="/profile" onClick={() => setMobileMenu(false)} className="block py-2">
+            <Link
+              to="/profile"
+              onClick={() => setTimeout(() => setMobileMenu(false), 0)}
+              className="block py-2"
+            >
               Profile
             </Link>
 
-            <Link to="/products/manage" onClick={() => setMobileMenu(false)} className="block py-2">
+            <Link
+              to="/products/manage"
+              onClick={() => setTimeout(() => setMobileMenu(false), 0)}
+              className="block py-2"
+            >
               Sell
             </Link>
 
             {isAdmin && (
-              <Link to="/admin" onClick={() => setMobileMenu(false)} className="block py-2">
+              <Link
+                to="/admin"
+                onClick={() => setTimeout(() => setMobileMenu(false), 0)}
+                className="block py-2"
+              >
                 Admin
               </Link>
             )}
 
-            <button onClick={handleLogout} className="block py-2 text-red-500">
+            <button
+              onClick={handleLogout}
+              className="block py-2 text-red-500"
+            >
               Logout
             </button>
 
