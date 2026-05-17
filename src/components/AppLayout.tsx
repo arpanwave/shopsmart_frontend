@@ -193,47 +193,59 @@ export function AppLayout({
           )}
         </div>
 
-        {/* MOBILE MENU (FIXED CLICK ISSUE) */}
-        {mobileMenu && user && (
-          <div
-            className="sm:hidden border-t bg-card px-4 py-3 space-y-2"
-            onClick={(e) => e.stopPropagation()}
-          >
+        {/* MOBILE MENU (FIXED CLICK + NAVIGATION) */}
+{mobileMenu && user && (
+  <div
+    className="sm:hidden border-t bg-card px-4 py-3 space-y-2"
+    onClick={(e) => e.stopPropagation()}
+  >
 
-            <Link
-              to="/profile"
-              onClick={() => setMobileMenu(false)}
-              className="block py-2"
-            >
-              Profile
-            </Link>
+    <Link
+      to="/profile"
+      onClick={(e) => {
+        e.preventDefault();
+        setMobileMenu(false);
+        navigate({ to: "/profile" });
+      }}
+      className="block py-2"
+    >
+      Profile
+    </Link>
 
-            <Link
-              to="/products/manage"
-              onClick={() => setMobileMenu(false)}
-              className="block py-2"
-            >
-              Sell
-            </Link>
+    <Link
+      to="/products/manage"
+      onClick={(e) => {
+        e.preventDefault();
+        setMobileMenu(false);
+        navigate({ to: "/products/manage" });
+      }}
+      className="block py-2"
+    >
+      Sell
+    </Link>
 
-            {isAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setMobileMenu(false)}
-                className="block py-2"
-              >
-                Admin
-              </Link>
-            )}
+    {isAdmin && (
+      <Link
+        to="/admin"
+        onClick={(e) => {
+          e.preventDefault();
+          setMobileMenu(false);
+          navigate({ to: "/admin" });
+        }}
+        className="block py-2"
+      >
+        Admin
+      </Link>
+    )}
 
-            <button
-              onClick={handleLogout}
-              className="block py-2 text-red-500"
-            >
-              Logout
-            </button>
-          </div>
-        )}
+    <button
+      onClick={handleLogout}
+      className="block py-2 text-red-500"
+    >
+      Logout
+    </button>
+  </div>
+)}
       </header>
 
       {/* BODY */}
