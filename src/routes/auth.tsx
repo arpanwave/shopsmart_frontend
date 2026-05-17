@@ -227,55 +227,169 @@ function AuthPage() {
 
       <section className="flex items-center justify-center p-6 sm:p-10">
         <div className="w-full max-w-md">
-          <h2 className="font-display font-bold text-3xl">
-            Welcome
-          </h2>
+          {/* Right form panel */}
+<section className="flex items-center justify-center p-6 sm:p-10">
+  <div className="w-full max-w-md">
+    <h2 className="font-display font-bold text-3xl">Welcome</h2>
+    <p className="text-muted-foreground mt-1">
+      Please enter your details to continue.
+    </p>
 
-          <p className="text-muted-foreground mt-1">
-            Please enter your details to continue.
-          </p>
+    {/* VERIFY BANNER (keep same logic you already had if needed) */}
+    {verifyBanner === "success" && (
+      <div className="mt-4 text-sm text-primary bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
+        Email verified successfully. Please sign in to continue.
+      </div>
+    )}
 
-          {/* GOOGLE LOGIN */}
+    {verifyBanner === "failure" && (
+      <div className="mt-4 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2">
+        Verification failed or expired.
+      </div>
+    )}
 
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={oauthLoading}
-            className="mt-6 w-full border border-border rounded-full h-12 flex items-center justify-center gap-3 hover:bg-secondary transition disabled:opacity-60"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 48 48"
-              className="w-5 h-5"
-            >
-              <path
-                fill="#FFC107"
-                d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12S17.4 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
-              />
-            </svg>
+    {/* TOGGLE (Login / Register) */}
+    <div className="mt-6 grid grid-cols-2 p-1 rounded-full bg-secondary text-sm font-semibold">
+      <button
+        type="button"
+        onClick={() => setMode("register")}
+        className={`py-2 rounded-full transition ${
+          mode === "register"
+            ? "bg-card shadow text-foreground"
+            : "text-muted-foreground"
+        }`}
+      >
+        Sign Up
+      </button>
 
-            <span className="font-medium">
-              {oauthLoading
-                ? "Redirecting..."
-                : "Continue with Google"}
-            </span>
-          </button>
+      <button
+        type="button"
+        onClick={() => setMode("login")}
+        className={`py-2 rounded-full transition ${
+          mode === "login"
+            ? "bg-card shadow text-foreground"
+            : "text-muted-foreground"
+        }`}
+      >
+        Login
+      </button>
+    </div>
 
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
+    {/* FORM */}
+    <form onSubmit={onSubmit} className="mt-6 space-y-4">
+      <Field label="Username" icon="person">
+        <input
+          type="text"
+          autoComplete="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="alex.morgan"
+          className="bg-transparent border-0 outline-none w-full text-sm"
+        />
+      </Field>
 
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-3 text-muted-foreground">
-                OR CONTINUE WITH
-              </span>
-            </div>
-          </div>
+      {mode === "register" && (
+        <Field label="Email Address" icon="mail">
+          <input
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="mail@example.com"
+            className="bg-transparent border-0 outline-none w-full text-sm"
+          />
+        </Field>
+      )}
 
-          {/* YOUR EXISTING FORM CONTINUES HERE */}
+      <Field label="Password" icon="lock">
+        <input
+          type={showPassword ? "text" : "password"}
+          autoComplete={
+            mode === "register"
+              ? "new-password"
+              : "current-password"
+          }
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          className="bg-transparent border-0 outline-none w-full text-sm"
+        />
 
-          {/* KEEP REST OF YOUR CURRENT FORM EXACTLY SAME */}
+        <button
+          type="button"
+          onClick={() => setShowPassword((v) => !v)}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <Icon
+            name={showPassword ? "visibility_off" : "visibility"}
+            className="text-[20px]"
+          />
+        </button>
+      </Field>
+
+      {error && (
+        <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2">
+          {error}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:opacity-90 transition disabled:opacity-60"
+      >
+        {submitting
+          ? mode === "register"
+            ? "Creating account..."
+            : "Signing in..."
+          : mode === "register"
+          ? "Create Account"
+          : "Sign In"}
+      </button>
+    </form>
+
+    {/* OR DIVIDER */}
+    <div className="relative my-6">
+      <div className="absolute inset-0 flex items-center">
+        <div className="w-full border-t border-border" />
+      </div>
+
+      <div className="relative flex justify-center text-xs uppercase">
+        <span className="bg-background px-3 text-muted-foreground">
+          OR CONTINUE WITH
+        </span>
+      </div>
+    </div>
+
+    {/* GOOGLE BUTTON */}
+    <button
+      type="button"
+      onClick={handleGoogleLogin}
+      disabled={oauthLoading}
+      className="w-full border border-border rounded-full h-12 flex items-center justify-center gap-3 hover:bg-secondary transition disabled:opacity-60"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 48 48"
+        className="w-5 h-5"
+      >
+        <path
+          fill="#FFC107"
+          d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12S17.4 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
+        />
+      </svg>
+
+      <span className="font-medium">
+        {oauthLoading ? "Redirecting..." : "Continue with Google"}
+      </span>
+    </button>
+
+    {/* FOOTER LINKS */}
+    <p className="mt-8 text-center text-xs text-muted-foreground">
+      By continuing, you agree to our Terms & Privacy Policy
+    </p>
+  </div>
+</section>
         </div>
       </section>
     </div>
