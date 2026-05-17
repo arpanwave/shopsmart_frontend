@@ -157,7 +157,7 @@ function AuthPage() {
     setOauthLoading(true);
 
     window.location.href =
-      `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
+      `${import.meta.env.VITE_API_FRONTEND}/oauth2/authorization/google`;
   };
 
   const resendVerification = async () => {
