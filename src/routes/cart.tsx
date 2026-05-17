@@ -66,11 +66,9 @@ function CartPage() {
     it: CartItem,
     q: number
   ) => {
-
     if (q < 1) return;
 
     try {
-
       const updated =
         await cartApi.updateQty(
           it.cartItemId,
@@ -160,17 +158,20 @@ function CartPage() {
 
   return (
     <AppLayout>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
 
-        <div className="flex items-baseline justify-between gap-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
 
-          <div>
+        {/* Header */}
 
-            <h1 className="font-display font-bold text-3xl">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+          <div className="min-w-0">
+
+            <h1 className="font-display font-bold text-2xl sm:text-3xl">
               Your Cart
             </h1>
 
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">
               {cart
                 ? `${cart.totalItems} item${cart.totalItems === 1 ? "" : "s"} in your cart`
                 : "Loading…"}
@@ -180,35 +181,39 @@ function CartPage() {
 
           <Link
             to="/"
-            className="text-sm text-primary font-semibold hover:underline"
+            className="inline-flex w-fit items-center text-sm font-semibold text-primary hover:underline"
           >
             Continue shopping
           </Link>
 
         </div>
 
+        {/* Error */}
+
         {error && (
-          <div className="mt-4 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2">
+          <div className="mt-4 rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
             {error}
           </div>
         )}
 
-        <div className="mt-6 grid lg:grid-cols-[1fr_360px] gap-6">
+        {/* Main Grid */}
 
-          {/* Items */}
+        <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_380px]">
 
-          <div className="space-y-3">
+          {/* Cart Items */}
+
+          <div className="space-y-4">
 
             {cart === null && !error && (
               <>
-                <div className="h-28 bg-secondary rounded-2xl animate-pulse" />
-                <div className="h-28 bg-secondary rounded-2xl animate-pulse" />
+                <div className="h-28 rounded-2xl bg-secondary animate-pulse" />
+                <div className="h-28 rounded-2xl bg-secondary animate-pulse" />
               </>
             )}
 
             {cart &&
               cart.items.length === 0 && (
-              <div className="text-center py-16 border border-dashed border-border rounded-2xl">
+              <div className="rounded-2xl border border-dashed border-border py-16 text-center">
 
                 <Icon
                   name="shopping_cart"
@@ -221,7 +226,7 @@ function CartPage() {
 
                 <Link
                   to="/"
-                  className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
                 >
                   Browse products
                 </Link>
@@ -233,17 +238,19 @@ function CartPage() {
 
               <div
                 key={it.cartItemId}
-                className="bg-card border border-border rounded-2xl p-3 sm:p-4 flex gap-3 sm:gap-4"
+                className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-3 sm:flex-row sm:items-start sm:p-4"
               >
 
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-secondary overflow-hidden shrink-0">
+                {/* Product Image */}
+
+                <div className="h-24 w-full overflow-hidden rounded-xl bg-secondary sm:h-24 sm:w-24 md:h-28 md:w-28 shrink-0">
 
                   <img
                     src={productsApi.imageUrl(
                       it.productId
                     )}
                     alt={it.productName}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                     onError={(e) => {
                       (
                         e.currentTarget as HTMLImageElement
@@ -253,7 +260,9 @@ function CartPage() {
 
                 </div>
 
-                <div className="flex-1 min-w-0 flex flex-col">
+                {/* Product Info */}
+
+                <div className="flex min-w-0 flex-1 flex-col">
 
                   <Link
                     to="/products/$productId"
@@ -262,18 +271,22 @@ function CartPage() {
                         it.productId
                       ),
                     }}
-                    className="font-display font-semibold line-clamp-1 hover:text-primary"
+                    className="line-clamp-2 font-display text-base font-semibold hover:text-primary sm:text-lg"
                   >
                     {it.productName}
                   </Link>
 
-                  <span className="font-semibold mt-1">
+                  <span className="mt-2 text-lg font-bold">
                     ${Number(it.price).toFixed(2)}
                   </span>
 
-                  <div className="mt-auto flex items-center justify-between">
+                  {/* Controls */}
 
-                    <div className="inline-flex items-center bg-secondary rounded-full">
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                    {/* Quantity */}
+
+                    <div className="inline-flex w-fit items-center rounded-full bg-secondary">
 
                       <button
                         onClick={() =>
@@ -282,7 +295,7 @@ function CartPage() {
                             it.quantity - 1
                           )
                         }
-                        className="w-8 h-8 grid place-items-center text-muted-foreground hover:text-foreground"
+                        className="grid h-9 w-9 place-items-center text-muted-foreground transition hover:text-foreground"
                         aria-label="Decrease"
                       >
                         <Icon
@@ -291,7 +304,7 @@ function CartPage() {
                         />
                       </button>
 
-                      <span className="w-8 text-center font-semibold text-sm">
+                      <span className="w-10 text-center text-sm font-semibold">
                         {it.quantity}
                       </span>
 
@@ -302,7 +315,7 @@ function CartPage() {
                             it.quantity + 1
                           )
                         }
-                        className="w-8 h-8 grid place-items-center text-muted-foreground hover:text-foreground"
+                        className="grid h-9 w-9 place-items-center text-muted-foreground transition hover:text-foreground"
                         aria-label="Increase"
                       >
                         <Icon
@@ -313,15 +326,21 @@ function CartPage() {
 
                     </div>
 
+                    {/* Remove */}
+
                     <button
                       onClick={() => remove(it)}
-                      className="w-9 h-9 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 grid place-items-center"
+                      className="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-2 text-sm text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
                       aria-label="Remove"
                     >
+
                       <Icon
                         name="delete"
                         className="text-[18px]"
                       />
+
+                      Remove
+
                     </button>
 
                   </div>
@@ -335,13 +354,13 @@ function CartPage() {
 
           {/* Summary */}
 
-          <aside className="lg:sticky lg:top-20 h-fit bg-card border border-border rounded-2xl p-5">
+          <aside className="h-fit rounded-2xl border border-border bg-card p-5 lg:sticky lg:top-20">
 
-            <h2 className="font-display font-bold text-xl">
+            <h2 className="font-display text-xl font-bold">
               Order Summary
             </h2>
 
-            <dl className="mt-4 space-y-2 text-sm">
+            <dl className="mt-5 space-y-3 text-sm">
 
               <Row
                 label="Subtotal"
@@ -361,13 +380,13 @@ function CartPage() {
 
             </dl>
 
-            <div className="border-t border-border mt-4 pt-4 flex items-baseline justify-between">
+            <div className="mt-5 flex items-baseline justify-between border-t border-border pt-5">
 
-              <span className="font-display font-semibold">
+              <span className="font-display text-base font-semibold">
                 Total
               </span>
 
-              <span className="font-display font-bold text-2xl">
+              <span className="font-display text-2xl font-bold sm:text-3xl">
                 ${total.toFixed(2)}
               </span>
 
@@ -380,7 +399,7 @@ function CartPage() {
                 !cart ||
                 cart.items.length === 0
               }
-              className="mt-5 w-full py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-50 sm:text-base"
             >
 
               {placing
@@ -394,7 +413,7 @@ function CartPage() {
 
             </button>
 
-            <p className="mt-3 text-xs text-muted-foreground inline-flex items-center gap-1.5 justify-center w-full">
+            <p className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
 
               <Icon
                 name="lock"
@@ -408,7 +427,9 @@ function CartPage() {
           </aside>
 
         </div>
+
       </div>
+
     </AppLayout>
   );
 }
@@ -424,7 +445,7 @@ function Row({
 }) {
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-start justify-between gap-3">
 
       <dt className="text-muted-foreground">
         {label}
@@ -433,8 +454,8 @@ function Row({
       <dd
         className={
           muted
-            ? "text-muted-foreground"
-            : "font-semibold"
+            ? "text-right text-muted-foreground"
+            : "text-right font-semibold"
         }
       >
         {value}
