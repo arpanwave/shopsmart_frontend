@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Icon } from "./Icon";
@@ -24,6 +24,14 @@ export function AppLayout({
   const [mobileMenu, setMobileMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  // ✅ BONUS: close mobile menu on route change
+  const routerState = useRouterState();
+  useEffect(() => {
+    setMobileMenu(false);
+    setOpenProfile(false);
+  }, [routerState.location.pathname]);
+
+  // close on outside click
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -193,59 +201,45 @@ export function AppLayout({
           )}
         </div>
 
-        {/* MOBILE MENU (FIXED CLICK + NAVIGATION) */}
-{mobileMenu && user && (
-  <div
-    className="sm:hidden border-t bg-card px-4 py-3 space-y-2"
-    onClick={(e) => e.stopPropagation()}
-  >
+        {/* MOBILE MENU (FIXED FINAL VERSION) */}
+        {mobileMenu && user && (
+          <div className="sm:hidden border-t bg-card px-4 py-3 space-y-2">
 
-    <Link
-      to="/profile"
-      onClick={(e) => {
-        e.preventDefault();
-        setMobileMenu(false);
-        navigate({ to: "/profile" });
-      }}
-      className="block py-2"
-    >
-      Profile
-    </Link>
+            <Link
+              to="/profile"
+              onClick={() => setMobileMenu(false)}
+              className="block py-2"
+            >
+              Profile
+            </Link>
 
-    <Link
-      to="/products/manage"
-      onClick={(e) => {
-        e.preventDefault();
-        setMobileMenu(false);
-        navigate({ to: "/products/manage" });
-      }}
-      className="block py-2"
-    >
-      Sell
-    </Link>
+            <Link
+              to="/products/manage"
+              onClick={() => setMobileMenu(false)}
+              className="block py-2"
+            >
+              Sell
+            </Link>
 
-    {isAdmin && (
-      <Link
-        to="/admin"
-        onClick={(e) => {
-          e.preventDefault();
-          setMobileMenu(false);
-          navigate({ to: "/admin" });
-        }}
-        className="block py-2"
-      >
-        Admin
-      </Link>
-    )}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenu(false)}
+                className="block py-2"
+              >
+                Admin
+              </Link>
+            )}
 
-    <button
-      onClick={handleLogout}
-      className="block py-2 text-red-500"
-    >
-      Logout
-    </button>
-  </div>
-)}
+            <button
+              onClick={handleLogout}
+              className="block py-2 text-red-500"
+            >
+              Logout
+            </button>
+
+          </div>
+        )}
       </header>
 
       {/* BODY */}
@@ -257,7 +251,7 @@ export function AppLayout({
           {bottomNav.map(item => (
             <Link
               key={item.label}
-              to={item.to as "/"}
+              to={item.to}
               className="flex flex-col items-center py-2 text-muted-foreground"
               activeProps={{ className: "text-primary" }}
             >
@@ -267,6 +261,7 @@ export function AppLayout({
           ))}
         </div>
       </nav>
+
     </div>
   );
 }
