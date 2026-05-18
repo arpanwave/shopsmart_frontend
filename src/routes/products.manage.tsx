@@ -256,9 +256,9 @@ function ManagePage() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[420px_1fr]">
           {/* Form */}
           <form
-            onSubmit={onSubmit}
-            className="bg-card border border-border rounded-2xl p-5 space-y-4 h-fit"
-          >
+  onSubmit={onSubmit}
+  className="order-2 lg:order-1 bg-card border border-border rounded-2xl p-5 space-y-4 h-fit"
+>
             <div className="flex items-center justify-between gap-3">
               <h2 className="font-display font-semibold text-xl">
                 {isEdit ? "Update Product" : "Add New Product"}
@@ -521,8 +521,8 @@ function ManagePage() {
           </form>
 
           {/* Product list */}
-          <div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+    <div className="order-1 lg:order-2">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
               <h2 className="font-display font-semibold text-xl">
                 {isAdmin ? "All Products" : "Your Products"}
               </h2>
