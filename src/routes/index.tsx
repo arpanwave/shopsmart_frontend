@@ -121,7 +121,7 @@ function HomePage() {
       {/* Layer 3 — text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <p
-          className="text-center text-base font-light leading-relaxed tracking-wide text-blue-100/80 max-w-md px-7 animate-pulse"
+          className="text-center text-base font-light leading-relaxed tracking-wide text-blue-100/80 max-w-lg px-7 animate-pulse"
           style={{ animationDuration: '3.3s' }}
         >
           Hi! My backend is hosted on Render&apos;s free tier,<br />
