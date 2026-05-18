@@ -105,29 +105,29 @@ function HomePage() {
 
   if (loading) {
   return (
-    <div className="min-h-screen relative overflow-hidden bg-black flex items-center justify-center px-6">
-      {/* Background glow */}
-      <div className="absolute w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl" />
+    <div className="fixed inset-0 z-50 overflow-hidden">
+      {/* Layer 1 — gradient background */}
+      <div className="absolute inset-0" style={{
+        background: `
+          radial-gradient(ellipse 70% 60% at 20% 30%, #1a3a6e 0%, transparent 65%),
+          radial-gradient(ellipse 55% 70% at 80% 70%, #0e2a55 0%, transparent 60%),
+          linear-gradient(150deg, #060d1f 0%, #0b1632 45%, #0d1c3f 100%)
+        `
+      }} />
 
-      {/* Glass card */}
-      <div className="relative z-10 max-w-lg w-full rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-8 sm:p-10 text-center">
-        
-        {/* Animated loading text */}
-        <h1 className="text-3xl sm:text-4xl font-bold text-white animate-pulse">
-          Loading...
-        </h1>
+      {/* Layer 2 — glass blur overlay */}
+      <div className="absolute inset-0 bg-blue-950/20" style={{ backdropFilter: 'blur(1px)', WebkitBackdropFilter: 'blur(1px)' }} />
 
-        {/* Message */}
-        <p className="mt-5 text-sm sm:text-base leading-relaxed text-white/70">
-          Hi 👋 My backend is hosted on Render’s free tier, so it may take a few minutes to start after being idle.
+      {/* Layer 3 — text */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <p
+          className="text-center text-base font-light leading-relaxed tracking-wide text-blue-100/80 max-w-sm px-6 animate-pulse"
+          style={{ animationDuration: '2.8s' }}
+        >
+          Hi! My backend is hosted on Render&apos;s free tier,<br />
+          so it may take a <span className="font-medium text-blue-50/95">few minutes to start</span><br />
+          after being idle.
         </p>
-
-        {/* Smooth loading dots */}
-        <div className="mt-6 flex justify-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.3s]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.15s]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/70 animate-bounce" />
-        </div>
       </div>
     </div>
   );
