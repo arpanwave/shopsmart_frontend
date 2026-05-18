@@ -104,12 +104,34 @@ function HomePage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen grid place-items-center text-muted-foreground px-4 text-center">
-        Loading...
+  return (
+    <div className="min-h-screen relative overflow-hidden bg-black flex items-center justify-center px-6">
+      {/* Background glow */}
+      <div className="absolute w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl" />
+
+      {/* Glass card */}
+      <div className="relative z-10 max-w-lg w-full rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-8 sm:p-10 text-center">
+        
+        {/* Animated loading text */}
+        <h1 className="text-3xl sm:text-4xl font-bold text-white animate-pulse">
+          Loading...
+        </h1>
+
+        {/* Message */}
+        <p className="mt-5 text-sm sm:text-base leading-relaxed text-white/70">
+          Hi 👋 My backend is hosted on Render’s free tier, so it may take a minute to start after being idle.
+        </p>
+
+        {/* Smooth loading dots */}
+        <div className="mt-6 flex justify-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.3s]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.15s]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-white/70 animate-bounce" />
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <AppLayout
