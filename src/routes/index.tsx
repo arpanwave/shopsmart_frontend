@@ -121,10 +121,10 @@ function HomePage() {
       {/* Layer 3 — text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <p
-          className="text-center text-base font-light leading-relaxed tracking-wide text-blue-100/80 max-w-lg px-7 animate-pulse"
-          style={{ animationDuration: '3.3s' }}
+          className="text-center font-light leading-relaxed tracking-wide text-blue-100/80 animate-pulse whitespace-nowrap text-sm sm:text-base lg:text-2xl xl:text-3xl"
+          style={{ animationDuration: '2.8s' }}
         >
-          Hi! My backend is hosted on Render&apos;s free tier,<br />
+          Hi 👋 My backend is hosted on Render&apos;s free tier,<br />
           so it may take a <span className="font-medium text-blue-50/95">few minutes to start</span><br />
           after being idle.
         </p>
