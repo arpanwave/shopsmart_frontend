@@ -119,7 +119,7 @@ function HomePage() {
 
         {/* Message */}
         <p className="mt-5 text-sm sm:text-base leading-relaxed text-white/70">
-          Hi 👋 My backend is hosted on Render’s free tier, so it may take a minute to start after being idle.
+          Hi 👋 My backend is hosted on Render’s free tier, so it may take a few minutes to start after being idle.
         </p>
 
         {/* Smooth loading dots */}
