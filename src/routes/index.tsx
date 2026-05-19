@@ -124,7 +124,7 @@ function HomePage() {
           className="text-center font-light leading-relaxed tracking-wide text-blue-100/80 animate-pulse whitespace-nowrap text-sm sm:text-base lg:text-2xl xl:text-3xl"
           style={{ animationDuration: '2.8s' }}
         >
-          Hi 👋 My backend is hosted on Render&apos;s free tier,<br />
+          Hi! My backend is hosted on Render&apos;s free tier,<br />
           so it may take a <span className="font-medium text-blue-50/95">few minutes to start</span><br />
           after being idle.
         </p>
