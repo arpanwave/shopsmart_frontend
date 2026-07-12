@@ -49,27 +49,6 @@ export const auth = {
     );
   },
 
-  resendVerification: (
-    email?: string
-  ) => {
-
-    const qs = email
-      ? `?email=${encodeURIComponent(email)}`
-      : "";
-
-    return api.post<unknown>(
-      `/api/auth/resend-verification${qs}`
-    );
-  },
-
-  verify: (
-    token: string
-  ) =>
-
-    api.get<unknown>(
-      `/api/auth/verify?token=${encodeURIComponent(token)}`
-    ),
-
   me: () =>
     api.get<User>(
       "/api/users/me"
