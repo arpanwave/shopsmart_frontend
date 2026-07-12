@@ -1,7 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
-  useEffect,
-  useRef,
   useState,
   type FormEvent,
 } from "react";
@@ -10,30 +8,12 @@ import { Icon } from "../components/Icon";
 
 import { useAuth } from "../lib/auth-context";
 
-import {
-  auth as authApi,
-  ApiError,
-} from "../lib/api";
+import { ApiError } from "../lib/api";
 
 export const Route =
   createFileRoute("/auth")({
 
-    validateSearch: (
-      search: Record<string, unknown>
-    ): { verified?: "1" | "0" } => {
-
-      const v = search.verified;
-
-      if (v === "1" || v === 1) {
-        return { verified: "1" };
-      }
-
-      if (v === "0" || v === 0) {
-        return { verified: "0" };
-      }
-
-      return {};
-    },
+    validateSearch: (): {} => ({}),
 
     head: () => ({
       meta: [
@@ -56,7 +36,6 @@ type Mode =
   | "register"
   | "login";
 
-const RESEND_COOLDOWN = 120;
 
 function AuthPage() {
 
@@ -71,15 +50,8 @@ function AuthPage() {
   const navigate =
     useNavigate();
 
-  const search =
-    Route.useSearch();
-
   const [mode, setMode] =
-    useState<Mode>(
-      search.verified === "1"
-        ? "login"
-        : "register"
-    );
+  useState<Mode>("register");
 
   const [username, setUsername] =
     useState("");
@@ -108,41 +80,6 @@ function AuthPage() {
   const [error, setError] =
     useState<string | null>(null);
 
-  const [verifyBanner] =
-    useState<
-      "success" | "failure" | null
-    >(
-      search.verified === "1"
-        ? "success"
-        : search.verified === "0"
-          ? "failure"
-          : null
-    );
-
-  const [
-    verificationSent,
-    setVerificationSent,
-  ] = useState(false);
-
-  const [
-    pendingEmail,
-    setPendingEmail,
-  ] = useState("");
-
-  const [cooldown, setCooldown] =
-    useState(0);
-
-  const [resending, setResending] =
-    useState(false);
-
-  const [resendInfo, setResendInfo] =
-    useState<string | null>(null);
-
-  const timerRef =
-    useRef<
-      ReturnType<typeof setInterval> | null
-    >(null);
-
   useEffect(() => {
 
     if (!loading && user) {
@@ -151,21 +88,6 @@ function AuthPage() {
 
   }, [user, loading, navigate]);
 
-  useEffect(() => {
-
-    if (cooldown <= 0) {
-
-      if (timerRef.current) {
-
-        clearInterval(
-          timerRef.current
-        );
-
-        timerRef.current = null;
-      }
-
-      return;
-    }
 
     if (!timerRef.current) {
 
@@ -248,20 +170,14 @@ function AuthPage() {
       if (mode === "register") {
 
         await register(
-          username.trim(),
-          email.trim(),
-          password
-        );
+    username.trim(),
+    email.trim(),
+    password
+);
 
-        setPendingEmail(
-          email.trim()
-        );
+await refreshUser();
 
-        setVerificationSent(true);
-
-        setCooldown(
-          RESEND_COOLDOWN
-        );
+navigate({ to: "/" });
 
       } else {
 
@@ -298,65 +214,9 @@ function AuthPage() {
       `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
   };
 
-  const resendVerification =
-    async () => {
 
-      if (
-        cooldown > 0 ||
-        resending
-      ) {
-        return;
-      }
 
-      setResendInfo(null);
-
-      setError(null);
-
-      setResending(true);
-
-      try {
-
-        await authApi.resendVerification(
-          pendingEmail ||
-          undefined
-        );
-
-        setResendInfo(
-          "Verification email sent again. Check your inbox."
-        );
-
-        setCooldown(
-          RESEND_COOLDOWN
-        );
-
-      } catch (err) {
-
-        setError(
-          err instanceof ApiError
-            ? err.message
-            : "Could not resend verification email."
-        );
-
-      } finally {
-
-        setResending(false);
-      }
-    };
-
-  const formatCooldown = (
-    s: number
-  ) => {
-
-    const m =
-      Math.floor(s / 60);
-
-    const sec = s % 60;
-
-    return `${m}:${sec
-      .toString()
-      .padStart(2, "0")}`;
-  };
-
+ 
   return (
 
     <div className="min-h-screen bg-background lg:grid lg:grid-cols-2">
@@ -435,74 +295,6 @@ function AuthPage() {
           <p className="mt-2 text-sm text-muted-foreground sm:text-base">
             Please enter your details to continue.
           </p>
-
-          {/* VERIFY BANNER */}
-
-          {verifyBanner === "success" && (
-
-            <div className="mt-4 rounded-xl border border-primary/20 bg-primary/10 px-3 py-3 text-sm text-primary">
-
-              Email verified successfully.
-              Please sign in to continue.
-
-            </div>
-          )}
-
-          {verifyBanner === "failure" && (
-
-            <div className="mt-4 rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-3 text-sm text-destructive">
-
-              Verification failed or expired.
-
-            </div>
-          )}
-
-          {/* SUCCESS MESSAGE */}
-
-          {verificationSent && (
-
-            <div className="mt-4 rounded-xl border border-primary/20 bg-primary/10 px-3 py-3 text-sm text-primary">
-
-              Verification email sent to{" "}
-              <span className="font-semibold break-all">
-                {pendingEmail}
-              </span>
-
-              <div className="mt-3">
-
-                <button
-                  type="button"
-                  onClick={
-                    resendVerification
-                  }
-                  disabled={
-                    cooldown > 0 ||
-                    resending
-                  }
-                  className="font-semibold underline underline-offset-2 disabled:opacity-50"
-                >
-
-                  {resending
-                    ? "Sending..."
-                    : cooldown > 0
-                      ? `Resend in ${formatCooldown(cooldown)}`
-                      : "Resend verification email"}
-
-                </button>
-
-              </div>
-
-            </div>
-          )}
-
-          {resendInfo && (
-
-            <div className="mt-4 rounded-xl border border-primary/20 bg-primary/10 px-3 py-3 text-sm text-primary">
-
-              {resendInfo}
-
-            </div>
-          )}
 
           {/* TOGGLE */}
 
