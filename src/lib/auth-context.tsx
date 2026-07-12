@@ -150,21 +150,19 @@ export function AuthProvider({
   );
 
   const register = useCallback(
-    async (
-      username: string,
-      email: string,
-      password: string
-    ) => {
+  async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
+    await auth.register(username, email, password);
+    // Immediately log the user in after successful registration
+    await auth.login(username, password);
+    await refresh();
+  },
+  [refresh]
+);
 
-      await auth.register(
-        username,
-        email,
-        password
-      );
-
-    },
-    []
-  );
 
   const logout = useCallback(async () => {
 
