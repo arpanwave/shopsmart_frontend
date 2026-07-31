@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
+  useEffect,
   useState,
   type FormEvent,
 } from "react";
@@ -88,32 +89,6 @@ function AuthPage() {
 
   }, [user, loading, navigate]);
 
-
-    if (!timerRef.current) {
-
-      timerRef.current =
-        setInterval(() => {
-
-          setCooldown((c) =>
-            c <= 1 ? 0 : c - 1
-          );
-
-        }, 1000);
-    }
-
-    return () => {
-
-      if (timerRef.current) {
-
-        clearInterval(
-          timerRef.current
-        );
-
-        timerRef.current = null;
-      }
-    };
-
-  }, [cooldown]);
 
   const onSubmit = async (
     e: FormEvent
