@@ -1,4 +1,4 @@
-# ShopSmart Backend 🛒
+# ShopSmart Frontend 🛒
 
 [![Java](https://img.shields.io/badge/Java-26-orange.svg)](https://java.com/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
